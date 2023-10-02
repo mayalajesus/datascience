@@ -134,11 +134,22 @@ produto_mais_vendido = dataframe["Product"].value_counts().idxmax()
 # Varejista que mais vendeu
 varejista_top = dataframe["Retailer"].value_counts().idxmax()
 
-col4, col5, col6 = st.columns(3)
+col1, col2, col3 = st.columns(3)
 
-col4.metric("Total de vendas", total_vendas_formatado)
-col5.metric("Produto mais vendido", produto_mais_vendido)
-col6.metric("Varejista que mais vendeu", varejista_top)
+# Conteúdo para a primeira coluna
+with col1:
+    # Adicione componentes à primeira coluna
+    st.write("Esta é a primeira coluna")
+
+# Conteúdo para a segunda coluna
+with col2:
+    # Adicione componentes à segunda coluna
+    st.write("Esta é a segunda coluna")
+
+# Conteúdo para a terceira coluna
+with col3:
+    # Adicione componentes à terceira coluna
+    st.write("Esta é a terceira coluna")
 
 st.markdown("""---""")
 
@@ -146,38 +157,39 @@ st.markdown("""---""")
 
 
 # PRIMEIRA FIGURA
-col7, col8 = st.columns(2)
+col4, col5 = st.columns(2)
 
-dataframe["Month"] = dataframe["Invoice Date"].dt.strftime("%Y-%m")
-vendas_mes = dataframe.groupby("Month")["Total Sales"].sum().reset_index()
-graf_vendas_mes = px.area(
-    vendas_mes,
-    x="Month",
-    y="Total Sales",
-    title="Total de vendas por mês",
-    color_discrete_sequence=cor1,
-)
+with st.columns(2):
+    dataframe["Month"] = dataframe["Invoice Date"].dt.strftime("%Y-%m")
+    vendas_mes = dataframe.groupby("Month")["Total Sales"].sum().reset_index()
+    graf_vendas_mes = px.area(
+        vendas_mes,
+        x="Month",
+        y="Total Sales",
+        title="Total de vendas por mês",
+        color_discrete_sequence=cor1,
+    )
 
-# Exibindo o primeiro gráfico na coluna 7
-col7.plotly_chart(graf_vendas_mes)
+    # Exibindo o primeiro gráfico na coluna 4
+    col4.plotly_chart(graf_vendas_mes)
+
+    # ------------------------------------------------
+
+    # SEGUNDA FIGURA
+    vendas_regiao = dataframe.groupby("Region")["Total Sales"].sum().reset_index()
+    graf_vendas_regiao = px.bar(
+        vendas_regiao,
+        x="Region",
+        y="Total Sales",
+        title="Total de vendas por região",
+        color_discrete_sequence=cor1,
+    )
+
+    # Exibindo o segundo gráfico na coluna 5
+    col5.plotly_chart(graf_vendas_regiao)
 
 # ------------------------------------------------
-
-# SEGUNDA FIGURA
-vendas_regiao = dataframe.groupby("Region")["Total Sales"].sum().reset_index()
-graf_vendas_regiao = px.bar(
-    vendas_regiao,
-    x="Region",
-    y="Total Sales",
-    title="Total de vendas por região",
-    color_discrete_sequence=cor1,
-)
-
-# Exibindo o segundo gráfico na coluna 8
-col8.plotly_chart(graf_vendas_regiao)
-
-# ------------------------------------------------
-col9, col10 = st.columns(2)
+col6, col7 = st.columns(2)
 # TERCEIRA FIGURA
 
 # Agrupando total de vendas por estado
@@ -188,7 +200,7 @@ vendas_por_estado = (
     .sort_values(by="Total Sales", ascending=False)
 )
 
-with col9:
+with col6:
     st.write("**Total de Vendas por Estados**")
     # Defina um tamanho máximo para a tabela e adicione uma barra de rolagem
     table_html = f"<div style='max-height: 300px; overflow-y: auto;'><table><thead><tr><th>Estados</th><th>Total de Vendas</th></tr></thead><tbody>"
@@ -203,7 +215,7 @@ with col9:
 
     # Exiba a tabela personalizada
     st.markdown(table_html, unsafe_allow_html=True)
-    col9.markdown("<br>", unsafe_allow_html=True)
+    col6.markdown("<br>", unsafe_allow_html=True)
 
 
 # ------------------------------------------------
@@ -226,7 +238,7 @@ vendas_por_produto["Total Sales"] = vendas_por_produto["Total Sales"].apply(
 vendas_por_produto = vendas_por_produto[
     ["Ranking", "Product", "Total Sales"]
 ].reset_index(drop=True)
-with col10:
+with col7:
     # Crie um DataFrame a partir de vendas_por_estado
     df_produto = pd.DataFrame(vendas_por_produto)
 
