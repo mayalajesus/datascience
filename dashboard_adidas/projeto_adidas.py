@@ -9,7 +9,7 @@ locale.setlocale(locale.LC_ALL, "C")
 # Configurando a página
 st.set_page_config(
     page_title="Dashboard Adidas",
-    page_icon="/workspaces/datascience/dashboard_adidas/logoadidas.png",
+    page_icon="\\workspaces\\datascience\\dashboard_adidas\\logoadidas.png",
     layout="wide",
 )
 
@@ -99,7 +99,7 @@ st.markdown(f"<style>{css_code}</style>", unsafe_allow_html=True)
 cor1 = ["#A9D943"]
 
 # Lendo o conjunto de dads
-dataframe = pd.read_excel("/workspaces/datascience/dashboard_adidas/sales_adidas.xlsx")
+dataframe = pd.read_excel("\\workspaces\\datascience\\dashboard_adidas\\sales_adidas.xlsx")
 
 
 # ------------------------------------------------
