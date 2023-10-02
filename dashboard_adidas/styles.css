@@ -1,0 +1,59 @@
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap');
+
+* {
+    margin: 0; /* Remove todas as margens iniciais */
+    font-family: 'Inter', sans-serif; /* Font do component, remova para usar a font nativa do PBI */
+}
+
+
+table { 
+    width: 700px; /* Largura da tabela, modifque conforme número de colunas */ 
+    border-collapse: collapse;
+}
+th { /* th - é o header da tabela */
+    background-color: #313A40; /* Cor do cabeçalho */
+    color: #F2F2F2; /* Cor do texto do cabeçalho */
+    
+    padding: 1rem;
+    border-bottom: 2px solid #2fb3d8;
+
+    text-align: left;
+    font-size: 0.875rem;
+    
+    line-height: 1.2;
+    width: auto;
+}
+th:first-child {
+    border-top-left-radius: 8px; /* Aplica borda superior esquerdo na primeira coluna */
+    padding-left: 1.5rem;
+}
+th:last-child {
+    border-top-right-radius: 8px; /* Aplica borda superior direito na ultima coluna */
+    padding-right: 1.5rem;
+}
+td {
+    cursor: pointer;
+    background-color: #0E1117; /* Cor das linhas */
+    border-top: 1px solid rgb(221, 221, 221);  /* Cor das linhas separadoras*/
+    padding: 1rem; /* preenchimento ao redor */
+    font-size: 0.900rem; /* font dos textos das linhas */
+    line-height: 1.2; /* Altura dos textos das linhas */
+    width: auto; /* largura automática das linhas */
+}
+td:first-child {
+    padding-left: 1.5rem;
+}
+
+td:last-child {
+    padding-right: 1.5rem;
+}
+
+/* Todas linhas - ao passar o mouse */
+
+td:hover {
+    background: #313A40; /* Cor ao passar o mouse */
+    z-index: 1;
+    transition: 300ms; /* Tempo para esmaecer */
+}
+
