@@ -99,7 +99,7 @@ st.markdown(f"<style>{css_code}</style>", unsafe_allow_html=True)
 cor1 = ["#A9D943"]
 
 # Lendo o conjunto de dads
-dataframe = pd.read_excel("C:\\Users\\Mayala\\Documents\\ciencia_de_dados\\projetos\\datascience\\dashboard_adidas\\sales_adidas.xlsx")
+dataframe = pd.read_excel("dashboard_adidas/sales_adidas.xlsx")
 
 
 # ------------------------------------------------
