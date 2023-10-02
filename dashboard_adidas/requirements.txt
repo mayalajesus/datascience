@@ -1,7 +1,7 @@
-plotly_express==0.4.1
-pandas==1.2.4
-numpy==1.21.0
-streamlit==0.79.0
-openpyxl==3.1.2
+plotly_express
+pandas
+numpy
+streamlit
+openpyxl
 
 locales-all
