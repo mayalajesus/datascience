@@ -127,7 +127,7 @@ st.markdown("""<br>""", unsafe_allow_html=True)
 # ------------------------------------------------
 
 # Criando a configuração da página
-col1, col2, col3 = st.columns(3)
+col1, col2, col3 =  st.beta_columns(3)
 
 # Configuração do primeiro card - Total de vendas
 total_vendas = round(dataframe["Total Sales"].sum(), 2)
@@ -147,7 +147,7 @@ st.markdown("""---""")
 # ------------------------------------------------
 
 # PRIMEIRA FIGURA
-col4, col5 = st.columns(2)
+col4, col5 =  st.beta_columns(2)
 
 # Configuração do gráfico de vendas por mês
 dataframe["Month"] = dataframe["Invoice Date"].dt.strftime("%Y-%m")
@@ -179,7 +179,7 @@ col5.plotly_chart(graf_vendas_regiao)
 # ------------------------------------------------
 
 # SEGUNDA FIGURA
-col6, col7 = st.columns(2)
+col6, col7 =  st.beta_columns(2)
 
 # Configuração da tabela de vendas por estado
 vendas_por_estado = (
