@@ -105,7 +105,7 @@ dataframe = pd.read_excel("dashboard_adidas/sales_adidas.xlsx")
 # ------------------------------------------------
 
 # Criando a config da página
-col1, col2 = st.columns(2)
+col1 = st.columns(1)
 #col1.image("/workspaces/datascience/dashboard_adidas/logoadidas.png", use_column_width=False, width=85)
 col1.markdown(
     "<h1 style='font-family: Montserrat, sans-serif; font-weight: normal;'>Dashboard das <span style='font-weight: bold;'>Vendas Adidas</span></h2>",
