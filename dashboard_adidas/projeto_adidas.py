@@ -4,7 +4,7 @@ import streamlit as st
 import plotly_express as px
 import plotly.graph_objects as go
 import locale
-locale.setlocale(locale.LC_ALL, "de_DE")
+locale.setlocale(locale.LC_ALL, "C")
 
 # Configurando a página
 st.set_page_config(
