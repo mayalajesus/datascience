@@ -8,7 +8,7 @@ if defined _OLD_CODEPAGE (
     "%SystemRoot%\System32\chcp.com" 65001 > nul
 )
 
-set VIRTUAL_ENV=C:\Users\Mayala\Documents\Ciência de Dados\projetos-jupyter\ambiente_adidas
+set VIRTUAL_ENV=C:\Users\Mayala\Documents\ciencia_de_dados\projetos\datascience\dashboard_adidas\ambiente_adidas
 
 if not defined PROMPT set PROMPT=$P$G
 

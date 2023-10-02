@@ -4,6 +4,7 @@ import streamlit as st
 import plotly_express as px
 import plotly.graph_objects as go
 import locale
+
 locale.setlocale(locale.LC_ALL, "C")
 
 # Configurando a página
@@ -20,7 +21,8 @@ st.markdown(
     }
     </style>
     """,
-    unsafe_allow_html=True)
+    unsafe_allow_html=True,
+)
 
 # Define a cor de fundo da página
 st.markdown(
@@ -31,7 +33,7 @@ st.markdown(
     }
     </style>
     """,
-    unsafe_allow_html=True
+    unsafe_allow_html=True,
 )
 
 # Lendo o arquivo CSS
@@ -98,7 +100,7 @@ td:hover {
 
     </style>
     """,
-    unsafe_allow_html=True
+    unsafe_allow_html=True,
 )
 
 # Renderizando o CSS usando st.markdown()
@@ -114,15 +116,13 @@ dataframe = pd.read_excel("dashboard_adidas/sales_adidas.xlsx")
 # ------------------------------------------------
 
 # Criando a config da página
-#col1.image("/workspaces/datascience/dashboard_adidas/logoadidas.png", use_column_width=False, width=85)
+# col1.image("/workspaces/datascience/dashboard_adidas/logoadidas.png", use_column_width=False, width=85)
 
 st.markdown(
     "<h1 style='font-family: Montserrat, sans-serif; font-weight: normal;'>Dashboard das <span style='font-weight: bold;'>Vendas Adidas</span></h2>",
     unsafe_allow_html=True,
 )
 st.markdown("<br>", unsafe_allow_html=True)
-
-
 
 
 # Criando os 3 primeiros cards
@@ -243,16 +243,20 @@ with col7:
     df_produto = pd.DataFrame(vendas_por_produto)
 
     # Remova todos os caracteres não numéricos da coluna "Total Sales" e converta para float
-    df_produto["Total Sales"] = df_produto["Total Sales"].str.replace('[^\d.]', '', regex=True).astype(float)
+    df_produto["Total Sales"] = (
+        df_produto["Total Sales"].str.replace("[^\d.]", "", regex=True).astype(float)
+    )
 
     # Calcule a frequência relativa
-    df_produto['Relative Frequency'] = df_produto['Total Sales'] / df_produto['Total Sales'].sum()
+    df_produto["Relative Frequency"] = (
+        df_produto["Total Sales"] / df_produto["Total Sales"].sum()
+    )
 
     # Arredonde o valor da frequência relativa para duas casas decimais
-    df_produto['Relative Frequency'] = df_produto['Relative Frequency'].round(2)
+    df_produto["Relative Frequency"] = df_produto["Relative Frequency"].round(2)
 
     # Ordene o DataFrame pelo valor da frequência relativa em ordem decrescente
-    df_produto = df_produto.sort_values(by='Relative Frequency', ascending=False)
+    df_produto = df_produto.sort_values(by="Relative Frequency", ascending=False)
 
     # Configure o gráfico de barras horizontais com Plotly Express
     visual1 = px.bar(
@@ -260,7 +264,9 @@ with col7:
         x="Relative Frequency",  # Use a frequência relativa no eixo x
         y="Product",
         orientation="h",
-        text=df_produto["Relative Frequency"].apply(lambda x: f"{x}%"),  # Adicione o símbolo "%" nas porcentagens
+        text=df_produto["Relative Frequency"].apply(
+            lambda x: f"{x}%"
+        ),  # Adicione o símbolo "%" nas porcentagens
     )
 
     # Personalize o layout do gráfico
@@ -279,7 +285,9 @@ with col7:
     )
 
     visual1.update_yaxes(tickfont=dict(size=16))
-    visual1.update_xaxes(showline=False, showticklabels=False)  # Remova os rótulos do eixo x
+    visual1.update_xaxes(
+        showline=False, showticklabels=False
+    )  # Remova os rótulos do eixo x
     st.plotly_chart(visual1)
 
 # QUINTA FIGURA
