@@ -112,172 +112,171 @@ cor1 = ["#A9D943"]
 # Lendo o conjunto de dados
 dataframe = pd.read_excel("dashboard_adidas/sales_adidas.xlsx")
 
+# Título da pagina
+
+st.markdown(
+    """
+    <div style="font-family: 'Inter', sans-serif; font-size: 38px; font-weight: thin;">
+        Dashboard de <span style="font-weight: bold;">Vendas Adidas</span>
+    </div>
+""",
+    unsafe_allow_html=True,
+)
+st.markdown("""<br>""", unsafe_allow_html=True)
 
 # ------------------------------------------------
 
-# Criando o título da página
-st.markdown(
-    "<h1 style='font-family: Montserrat, sans-serif; font-weight: normal;'>Dashboard das <span style='font-weight: bold;'>Vendas Adidas</span></h2>",
-    unsafe_allow_html=True,
-)
-st.markdown("<br>", unsafe_allow_html=True)
+# Criando a configuração da página
+col1, col2, col3 = st.columns(3)
 
-
-# Criando os 3 primeiros cards
-# Total de vendas
+# Configuração do primeiro card - Total de vendas
 total_vendas = round(dataframe["Total Sales"].sum(), 2)
 total_vendas_formatado = f"${total_vendas:,.2f}"
-# Produto mais vendido
+col1.metric("Total de vendas", total_vendas_formatado)
+
+# Configuração do segundo card - Produto mais vendido
 produto_mais_vendido = dataframe["Product"].value_counts().idxmax()
-# Varejista que mais vendeu
+col2.metric("Produto mais vendido", produto_mais_vendido)
+
+# Configuração do terceiro card - Varejista que mais vendeu
 varejista_top = dataframe["Retailer"].value_counts().idxmax()
-
-with st.columns(3):
-    # Conteúdo para a primeira coluna
-    st.metric("Total de vendas", total_sales_formatado)
-
-    # Conteúdo para a segunda coluna
-    st.metric("Produto mais vendido", produto_mais_vendido)
-
-    # Conteúdo para a terceira coluna
-    st.metric("Varejista que mais vendeu", varejista_top)
+col3.metric("Varejista que mais vendeu", varejista_top)
 
 st.markdown("""---""")
 
 # ------------------------------------------------
 
-
 # PRIMEIRA FIGURA
-with st.columns(2):
-    dataframe["Month"] = dataframe["Invoice Date"].dt.strftime("%Y-%m")
-    vendas_mes = dataframe.groupby("Month")["Total Sales"].sum().reset_index()
-    graf_vendas_mes = px.area(
-        vendas_mes,
-        x="Month",
-        y="Total Sales",
-        title="Total de vendas por mês",
-        color_discrete_sequence=cor1,
-    )
+col4, col5 = st.columns(2)
 
-    # Exibindo o primeiro gráfico na coluna 4
-    st.plotly_chart(graf_vendas_mes)
+# Configuração do gráfico de vendas por mês
+dataframe["Month"] = dataframe["Invoice Date"].dt.strftime("%Y-%m")
+vendas_mes = dataframe.groupby("Month")["Total Sales"].sum().reset_index()
+graf_vendas_mes = px.area(
+    vendas_mes,
+    x="Month",
+    y="Total Sales",
+    title="Total de vendas por mês",
+    color_discrete_sequence=cor1,
+)
 
-    # ------------------------------------------------
+# Exibindo o gráfico na coluna 4
+col4.plotly_chart(graf_vendas_mes)
 
-    # SEGUNDA FIGURA
-    vendas_regiao = dataframe.groupby("Region")["Total Sales"].sum().reset_index()
-    graf_vendas_regiao = px.bar(
-        vendas_regiao,
-        x="Region",
-        y="Total Sales",
-        title="Total de vendas por região",
-        color_discrete_sequence=cor1,
-    )
+# Configuração do gráfico de vendas por região
+vendas_regiao = dataframe.groupby("Region")["Total Sales"].sum().reset_index()
+graf_vendas_regiao = px.bar(
+    vendas_regiao,
+    x="Region",
+    y="Total Sales",
+    title="Total de vendas por região",
+    color_discrete_sequence=cor1,
+)
 
-    # Exibindo o segundo gráfico na coluna 5
-    st.plotly_chart(graf_vendas_regiao)
-
-# ------------------------------------------------
-with st.columns(2):
-    # TERCEIRA FIGURA
-
-    # Agrupando total de vendas por estado
-    vendas_por_estado = (
-        dataframe.groupby("State")["Total Sales"]
-        .sum()
-        .reset_index()
-        .sort_values(by="Total Sales", ascending=False)
-    )
-
-    st.write("**Total de Vendas por Estados**")
-    # Defina um tamanho máximo para a tabela e adicione uma barra de rolagem
-    table_html = f"<div style='max-height: 300px; overflow-y: auto;'><table><thead><tr><th>Estados</th><th>Total de Vendas</th></tr></thead><tbody>"
-    for _, row in vendas_por_estado.iterrows():
-        total_sales_formatado = row["Total Sales"]
-        total_sales_formatado_com_cifrao = (
-            f"${total_sales_formatado:,.2f}"  # Adicione o cifrão
-        )
-        table_html += f"<tr><td>{row['State']}</td><td>{total_sales_formatado_com_cifrao}</td></tr>"
-
-    table_html += "</tbody></table></div>"
-
-    # Exiba a tabela personalizada
-    st.markdown(table_html, unsafe_allow_html=True)
+# Exibindo o gráfico na coluna 5
+col5.plotly_chart(graf_vendas_regiao)
 
 # ------------------------------------------------
-with st.columns(2):
-    # QUARTA FIGURA
 
-    # Crie um componente de layout no Streamlit
-    # Agrupando e criando ranking de total de vendas por produto
-    vendas_por_produto = (
-        dataframe.groupby("Product")["Total Sales"]
-        .sum()
-        .reset_index()
-        .sort_values(by="Total Sales", ascending=False)
+# SEGUNDA FIGURA
+col6, col7 = st.columns(2)
+
+# Configuração da tabela de vendas por estado
+vendas_por_estado = (
+    dataframe.groupby("State")["Total Sales"]
+    .sum()
+    .reset_index()
+    .sort_values(by="Total Sales", ascending=False)
+)
+
+col6.write("**Total de Vendas por Estados**")
+# Defina um tamanho máximo para a tabela e adicione uma barra de rolagem
+table_html = f"<div style='max-height: 300px; overflow-y: auto;'><table><thead><tr><th>Estados</th><th>Total de Vendas</th></tr></thead><tbody>"
+for _, row in vendas_por_estado.iterrows():
+    total_sales_formatado = row["Total Sales"]
+    total_sales_formatado_com_cifrao = (
+        f"${total_sales_formatado:,.2f}"  # Adicione o cifrão
     )
-    vendas_por_produto["Ranking"] = (
-        vendas_por_produto["Total Sales"].rank(ascending=False, method="min").astype(int)
-    )
-    vendas_por_produto["Total Sales"] = vendas_por_produto["Total Sales"].apply(
-        lambda x: f"${x:,.2f}"
-    )
-    vendas_por_produto = vendas_por_produto[
-        ["Ranking", "Product", "Total Sales"]
-    ].reset_index(drop=True)
-
-    st.write("**Frequência Relativa de Vendas por Produto**")
-
-    # Crie um DataFrame a partir de vendas_por_estado
-    df_produto = pd.DataFrame(vendas_por_produto)
-
-    # Remova todos os caracteres não numéricos da coluna "Total Sales" e converta para float
-    df_produto["Total Sales"] = (
-        df_produto["Total Sales"].str.replace("[^\d.]", "", regex=True).astype(float)
+    table_html += (
+        f"<tr><td>{row['State']}</td><td>{total_sales_formatado_com_cifrao}</td></tr>"
     )
 
-    # Calcule a frequência relativa
-    df_produto["Relative Frequency"] = (
-        df_produto["Total Sales"] / df_produto["Total Sales"].sum()
-    )
+table_html += "</tbody></table></div>"
 
-    # Arredonde o valor da frequência relativa para duas casas decimais
-    df_produto["Relative Frequency"] = df_produto["Relative Frequency"].round(2)
+# Exiba a tabela personalizada
+col6.markdown(table_html, unsafe_allow_html=True)
 
-    # Ordene o DataFrame pelo valor da frequência relativa em ordem decrescente
-    df_produto = df_produto.sort_values(by="Relative Frequency", ascending=False)
+# ------------------------------------------------
 
-    # Configure o gráfico de barras horizontais com Plotly Express
-    visual1 = px.bar(
-        df_produto,
-        x="Relative Frequency",  # Use a frequência relativa no eixo x
-        y="Product",
-        orientation="h",
-        text=df_produto["Relative Frequency"].apply(
-            lambda x: f"{x}%"
-        ),  # Adicione o símbolo "%" nas porcentagens
-    )
+# TERCEIRA FIGURA
 
-    # Personalize o layout do gráfico
-    visual1.update_layout(
-        title="Frequência Relativa de Vendas por Produto",
-        xaxis_tickformat="%",  # Exibir valores no eixo x como porcentagens
-        xaxis_title="",  # Remova o título do eixo x
-        showlegend=False,  # Oculte a legenda
-        height=400,
-    )
+# Configuração do gráfico de frequência relativa de vendas por produto
+vendas_por_produto = (
+    dataframe.groupby("Product")["Total Sales"]
+    .sum()
+    .reset_index()
+    .sort_values(by="Total Sales", ascending=False)
+)
+vendas_por_produto["Ranking"] = (
+    vendas_por_produto["Total Sales"].rank(ascending=False, method="min").astype(int)
+)
+vendas_por_produto["Total Sales"] = vendas_por_produto["Total Sales"].apply(
+    lambda x: f"${x:,.2f}"
+)
+vendas_por_produto = vendas_por_produto[
+    ["Ranking", "Product", "Total Sales"]
+].reset_index(drop=True)
 
-    # Defina a cor das barras para verde
-    visual1.update_traces(
-        marker=dict(color="#A9D943"),
-        insidetextfont=dict(size=14, color="#0E1117"),  # Cor do texto dentro das barras
-    )
+# Crie um DataFrame a partir de vendas_por_estado
+df_produto = pd.DataFrame(vendas_por_produto)
 
-    visual1.update_yaxes(tickfont=dict(size=16))
-    visual1.update_xaxes(
-        showline=False, showticklabels=False
-    )  # Remova os rótulos do eixo x
-    st.plotly_chart(visual1)
+# Remova todos os caracteres não numéricos da coluna "Total Sales" e converta para float
+df_produto["Total Sales"] = (
+    df_produto["Total Sales"].str.replace("[^\d.]", "", regex=True).astype(float)
+)
+
+# Calcule a frequência relativa
+df_produto["Relative Frequency"] = (
+    df_produto["Total Sales"] / df_produto["Total Sales"].sum()
+)
+
+# Arredonde o valor da frequência relativa para duas casas decimais
+df_produto["Relative Frequency"] = df_produto["Relative Frequency"].round(2)
+
+# Ordene o DataFrame pelo valor da frequência relativa em ordem decrescente
+df_produto = df_produto.sort_values(by="Relative Frequency", ascending=False)
+
+# Configure o gráfico de barras horizontais com Plotly Express
+visual1 = px.bar(
+    df_produto,
+    x="Relative Frequency",  # Use a frequência relativa no eixo x
+    y="Product",
+    orientation="h",
+    text=df_produto["Relative Frequency"].apply(
+        lambda x: f"{x}%"
+    ),  # Adicione o símbolo "%" nas porcentagens
+)
+
+# Personalize o layout do gráfico
+visual1.update_layout(
+    title="Frequência Relativa de Vendas por Produto",
+    xaxis_tickformat="%",  # Exibir valores no eixo x como porcentagens
+    xaxis_title="",  # Remova o título do eixo x
+    showlegend=False,  # Oculte a legenda
+    height=400,
+)
+
+# Defina a cor das barras para verde
+visual1.update_traces(
+    marker=dict(color="#A9D943"),
+    insidetextfont=dict(size=14, color="#0E1117"),  # Cor do texto dentro das barras
+)
+
+visual1.update_yaxes(tickfont=dict(size=16))
+visual1.update_xaxes(
+    showline=False, showticklabels=False
+)  # Remova os rótulos do eixo x
+col7.plotly_chart(visual1)
 
 
 # QUINTA FIGURA
