@@ -115,7 +115,7 @@ dataframe = pd.read_excel("dashboard_adidas/sales_adidas.xlsx")
 
 # ------------------------------------------------
 
-# Criando a configuração da página
+# Criando o título da página
 st.markdown(
     "<h1 style='font-family: Montserrat, sans-serif; font-weight: normal;'>Dashboard das <span style='font-weight: bold;'>Vendas Adidas</span></h2>",
     unsafe_allow_html=True,
