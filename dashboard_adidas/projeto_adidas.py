@@ -9,9 +9,18 @@ locale.setlocale(locale.LC_ALL, "C")
 # Configurando a página
 st.set_page_config(
     page_title="Dashboard Adidas",
-    page_icon="\\workspaces\\datascience\\dashboard_adidas\\logoadidas.png",
+    page_icon="dashboard_adidas/logoadidas.png",
     layout="wide",
 )
+st.markdown(
+    """
+    <style>
+    body {
+        background-color: #002D72; /* Substitua pela cor desejada em formato hexadecimal */
+    }
+    </style>
+    """,
+    unsafe_allow_html=True)
 
 # Define a cor de fundo da página
 st.markdown(
@@ -105,22 +114,15 @@ dataframe = pd.read_excel("dashboard_adidas/sales_adidas.xlsx")
 # ------------------------------------------------
 
 # Criando a config da página
-col1 = st.columns(1)
 #col1.image("/workspaces/datascience/dashboard_adidas/logoadidas.png", use_column_width=False, width=85)
-col1.markdown(
+
+st.markdown(
     "<h1 style='font-family: Montserrat, sans-serif; font-weight: normal;'>Dashboard das <span style='font-weight: bold;'>Vendas Adidas</span></h2>",
     unsafe_allow_html=True,
 )
-col1.markdown("<br>", unsafe_allow_html=True)
-st.markdown(
-    """
-    <style>
-    body {
-        background-color: #002D72; /* Substitua pela cor desejada em formato hexadecimal */
-    }
-    </style>
-    """,
-    unsafe_allow_html=True)
+st.markdown("<br>", unsafe_allow_html=True)
+
+
 
 
 # Criando os 3 primeiros cards
