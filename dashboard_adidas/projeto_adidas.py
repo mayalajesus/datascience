@@ -139,17 +139,17 @@ col1, col2, col3 = st.columns(3)
 # Conteúdo para a primeira coluna
 with col1:
     # Adicione componentes à primeira coluna
-    st.write("Esta é a primeira coluna")
+    st.metric("Total de vendas", total_sales_formatado)
 
 # Conteúdo para a segunda coluna
 with col2:
     # Adicione componentes à segunda coluna
-    st.write("Esta é a segunda coluna")
+    st.metric("Produto mais vendido", produto_mais_vendido)
 
 # Conteúdo para a terceira coluna
 with col3:
     # Adicione componentes à terceira coluna
-    st.write("Esta é a terceira coluna")
+    st.metric("Varejista que mais vendeu", varejista_top)
 
 st.markdown("""---""")
 
