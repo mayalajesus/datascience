@@ -2,8 +2,9 @@ import pandas as pd
 import numpy as np
 import streamlit as st
 import plotly_express as px
-import locale
 import plotly.graph_objects as go
+import locale
+locale.setlocale(locale.LC_ALL, "de_DE")
 
 # Configurando a página
 st.set_page_config(
@@ -96,10 +97,6 @@ st.markdown(f"<style>{css_code}</style>", unsafe_allow_html=True)
 
 # Cores personalizadas
 cor1 = ["#A9D943"]
-cor2 = ["#A9D943", "#3473ED", "#5834ED", "#ED0574", "#ED7211", "#F7DE11"]
-
-# Definindo a localização para o formato brasileiro (pt_BR)
-locale.setlocale(locale.LC_ALL, "en_US.UTF-8")
 
 # Lendo o conjunto de dads
 dataframe = pd.read_excel("/workspaces/datascience/dashboard_adidas/sales_adidas.xlsx")
@@ -129,7 +126,7 @@ st.markdown(
 # Criando os 3 primeiros cards
 # Total de vendas
 total_vendas = round(dataframe["Total Sales"].sum(), 2)
-total_vendas = locale.currency(total_vendas, grouping=True)
+total_vendas_formatado = f"${total_vendas:,.2f}"
 # Produto mais vendido
 produto_mais_vendido = dataframe["Product"].value_counts().idxmax()
 # Varejista que mais vendeu
