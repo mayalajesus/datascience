@@ -109,15 +109,13 @@ st.markdown(f"<style>{css_code}</style>", unsafe_allow_html=True)
 # Cores personalizadas
 cor1 = ["#A9D943"]
 
-# Lendo o conjunto de dads
+# Lendo o conjunto de dados
 dataframe = pd.read_excel("dashboard_adidas/sales_adidas.xlsx")
 
 
 # ------------------------------------------------
 
-# Criando a config da página
-# col1.image("/workspaces/datascience/dashboard_adidas/logoadidas.png", use_column_width=False, width=85)
-
+# Criando a configuração da página
 st.markdown(
     "<h1 style='font-family: Montserrat, sans-serif; font-weight: normal;'>Dashboard das <span style='font-weight: bold;'>Vendas Adidas</span></h2>",
     unsafe_allow_html=True,
@@ -134,21 +132,14 @@ produto_mais_vendido = dataframe["Product"].value_counts().idxmax()
 # Varejista que mais vendeu
 varejista_top = dataframe["Retailer"].value_counts().idxmax()
 
-col1, col2, col3 = st.columns(3)
-
-# Conteúdo para a primeira coluna
-with col1:
-    # Adicione componentes à primeira coluna
+with st.columns(3):
+    # Conteúdo para a primeira coluna
     st.metric("Total de vendas", total_sales_formatado)
 
-# Conteúdo para a segunda coluna
-with col2:
-    # Adicione componentes à segunda coluna
+    # Conteúdo para a segunda coluna
     st.metric("Produto mais vendido", produto_mais_vendido)
 
-# Conteúdo para a terceira coluna
-with col3:
-    # Adicione componentes à terceira coluna
+    # Conteúdo para a terceira coluna
     st.metric("Varejista que mais vendeu", varejista_top)
 
 st.markdown("""---""")
@@ -157,8 +148,6 @@ st.markdown("""---""")
 
 
 # PRIMEIRA FIGURA
-col4, col5 = st.columns(2)
-
 with st.columns(2):
     dataframe["Month"] = dataframe["Invoice Date"].dt.strftime("%Y-%m")
     vendas_mes = dataframe.groupby("Month")["Total Sales"].sum().reset_index()
@@ -171,7 +160,7 @@ with st.columns(2):
     )
 
     # Exibindo o primeiro gráfico na coluna 4
-    col4.plotly_chart(graf_vendas_mes)
+    st.plotly_chart(graf_vendas_mes)
 
     # ------------------------------------------------
 
@@ -186,21 +175,20 @@ with st.columns(2):
     )
 
     # Exibindo o segundo gráfico na coluna 5
-    col5.plotly_chart(graf_vendas_regiao)
+    st.plotly_chart(graf_vendas_regiao)
 
 # ------------------------------------------------
-col6, col7 = st.columns(2)
-# TERCEIRA FIGURA
+with st.columns(2):
+    # TERCEIRA FIGURA
 
-# Agrupando total de vendas por estado
-vendas_por_estado = (
-    dataframe.groupby("State")["Total Sales"]
-    .sum()
-    .reset_index()
-    .sort_values(by="Total Sales", ascending=False)
-)
+    # Agrupando total de vendas por estado
+    vendas_por_estado = (
+        dataframe.groupby("State")["Total Sales"]
+        .sum()
+        .reset_index()
+        .sort_values(by="Total Sales", ascending=False)
+    )
 
-with col6:
     st.write("**Total de Vendas por Estados**")
     # Defina um tamanho máximo para a tabela e adicione uma barra de rolagem
     table_html = f"<div style='max-height: 300px; overflow-y: auto;'><table><thead><tr><th>Estados</th><th>Total de Vendas</th></tr></thead><tbody>"
@@ -215,30 +203,31 @@ with col6:
 
     # Exiba a tabela personalizada
     st.markdown(table_html, unsafe_allow_html=True)
-    col6.markdown("<br>", unsafe_allow_html=True)
-
 
 # ------------------------------------------------
-# QUARTA FIGURA
+with st.columns(2):
+    # QUARTA FIGURA
 
-# Crie um componente de layout no Streamlit
-# Agrupando e criando ranking de total de vendas por produto
-vendas_por_produto = (
-    dataframe.groupby("Product")["Total Sales"]
-    .sum()
-    .reset_index()
-    .sort_values(by="Total Sales", ascending=False)
-)
-vendas_por_produto["Ranking"] = (
-    vendas_por_produto["Total Sales"].rank(ascending=False, method="min").astype(int)
-)
-vendas_por_produto["Total Sales"] = vendas_por_produto["Total Sales"].apply(
-    lambda x: f"${x:,.2f}"
-)
-vendas_por_produto = vendas_por_produto[
-    ["Ranking", "Product", "Total Sales"]
-].reset_index(drop=True)
-with col7:
+    # Crie um componente de layout no Streamlit
+    # Agrupando e criando ranking de total de vendas por produto
+    vendas_por_produto = (
+        dataframe.groupby("Product")["Total Sales"]
+        .sum()
+        .reset_index()
+        .sort_values(by="Total Sales", ascending=False)
+    )
+    vendas_por_produto["Ranking"] = (
+        vendas_por_produto["Total Sales"].rank(ascending=False, method="min").astype(int)
+    )
+    vendas_por_produto["Total Sales"] = vendas_por_produto["Total Sales"].apply(
+        lambda x: f"${x:,.2f}"
+    )
+    vendas_por_produto = vendas_por_produto[
+        ["Ranking", "Product", "Total Sales"]
+    ].reset_index(drop=True)
+
+    st.write("**Frequência Relativa de Vendas por Produto**")
+
     # Crie um DataFrame a partir de vendas_por_estado
     df_produto = pd.DataFrame(vendas_por_produto)
 
@@ -289,6 +278,7 @@ with col7:
         showline=False, showticklabels=False
     )  # Remova os rótulos do eixo x
     st.plotly_chart(visual1)
+
 
 # QUINTA FIGURA
 
