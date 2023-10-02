@@ -135,7 +135,8 @@ produto_mais_vendido = dataframe["Product"].value_counts().idxmax()
 varejista_top = dataframe["Retailer"].value_counts().idxmax()
 
 col4, col5, col6 = st.columns(3)
-col4.metric("Total de vendas", total_vendas)
+
+col4.metric("Total de vendas", total_vendas_formatado)
 col5.metric("Produto mais vendido", produto_mais_vendido)
 col6.metric("Varejista que mais vendeu", varejista_top)
 
