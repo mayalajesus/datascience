@@ -11,6 +11,6 @@ Atualmente, este repositório contém apenas projetos pessoais que refletem minh
 Cada projeto é uma oportunidade para explorar dados do mundo real.
 
 * **Quem realmente governa os municípios brasileiros? Uma análise exploratória da base MUNIC:** [estudo-base-munic](https://github.com/mayalajesus/datascience/blob/main/analise_basemunic/estudo_basemunic.ipynb)
-* **Dashboard design de vendas (Streamlit):** [dashboard-design-adidas](https://datascience-hvyq75nlpq59nvefpznfdm.streamlit.app/)
+* **Dashboard design de vendas (Streamlit):** [dashboard-design-adidas]([https://datascience-hvyq75nlpq59nvefpznfdm.streamlit.app/](https://github.com/mayalajesus/datascience/tree/main/dashboard_design_adidas)https://github.com/mayalajesus/datascience/tree/main/dashboard_design_adidas)
 
 
