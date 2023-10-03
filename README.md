@@ -3,8 +3,6 @@
 
 Bem-vindo ao meu repositório de projetos de ciência de dados!
 
-**Background in:** Python | SQL | Streamlit | DataViz
-
 * [LinkedIn](https://www.linkedin.com/in/mayala-jesus/)
 
 ## Projetos pessoais:
