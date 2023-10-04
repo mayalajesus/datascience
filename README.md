@@ -10,7 +10,7 @@ Aqui você encontrará uma coleção de notebooks dos meus projetos na área de 
 Atualmente, este repositório contém apenas projetos pessoais que refletem minhas habilidades e paixão pela ciência de dados. 
 Cada projeto é uma oportunidade para explorar dados do mundo real.
 
-* **Presença feminina nos orgãos municipais. Análise exploratória da base MUNIC:** [estudo-base-munic](https://github.com/mayalajesus/datascience/blob/main/analise_basemunic/estudo_basemunic.ipynb)
+* **A Representatividade Feminina nos Órgãos Públicos das Cidades Brasileiras:** [estudo-base-munic](https://github.com/mayalajesus/datascience/blob/main/analise_basemunic/estudo_basemunic.ipynb)
 * **Dashboard design de vendas (Streamlit):** [dashboard-design-adidas](https://github.com/mayalajesus/datascience/tree/main/dashboard_design_adidas)
 
 
