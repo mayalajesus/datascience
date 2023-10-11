@@ -2,6 +2,8 @@ import pandas as pd
 import numpy as np
 import plotly.express as px
 import streamlit as st
+import plotly.graph_objects as go
+import plotly.figure_factory as ff
 
 # Configurando a página
 st.set_page_config(
@@ -148,7 +150,7 @@ df_sau['Regiao'] = df_sau['Regiao'].replace(mapeamento_sau)
 # ----------------------------------------------------------------------
 
 
-st.title('Representatividade Feminina nos Órgãos Públicos Municipais')
+st.title('Perfil de mulheres em cargos públicos municipais')
 
 # Usando guias para navegar entre as páginas
 tabs = st.tabs(["Geral", "Prefeituras", "Educação", "Cultura", "Esporte", "Saúde"])
@@ -158,7 +160,7 @@ tabs = st.tabs(["Geral", "Prefeituras", "Educação", "Cultura", "Esporte", "Sa�
 with tabs[0]:
     st.markdown("""<br>""", unsafe_allow_html=True)
 
-    colge1,colge2 = st.columns(2)
+    colge1,colge2 = st.columns([1, 2])
 
     with colge1:
 
@@ -210,16 +212,17 @@ with tabs[0]:
         valores = [contagem_geral_fem, contagem_geral_mas]
 
         # Criar a figura de pizza
+        st.write("Distribuição de Gênero nos Orgãos Públicos Municipais")
         fig_pizza = px.pie(
             names=labels,
             values=valores,
-            title="Distribuição de Gênero Geral",
+        #   title="Distribuição de Gênero Geral",
             width=400,
             hole=0.5
         )
 
         # Exibir a figura no Streamlit
-        st.plotly_chart(fig_pizza, use_container_width=True)
+        st.plotly_chart(fig_pizza, use_container_width=False)
 
     with colge2:
         pre_fem = pd.DataFrame(df_pre[df_pre["Sexo"] == "Feminino"])
@@ -247,23 +250,93 @@ with tabs[0]:
                 if min_intervalo <= valor <= max_intervalo:
                     return f"{min_intervalo} - {max_intervalo}"
 
+        # Calcula a contagem da faixa populacional
         geral_fem['Faixa Populacional'] = geral_fem['Pop'].apply(atribuir_faixa_populacional)
-
         contagem_faixa_populacional = geral_fem['Faixa Populacional'].value_counts().reset_index()
         contagem_faixa_populacional.columns = ['Faixa Populacional', 'Contagem']
-        
-        st.write("Faixa Populacional nas Cidades com Liderança Feminina")
-        figpop = px.bar(contagem_faixa_populacional, x='Faixa Populacional', y='Contagem',
-                    labels={'Faixa Populacional': 'Faixa Populacional', 'Contagem': 'Contagem'},
-                    color_discrete_sequence=laranja
-                    )
-        
-        figpop.update_traces(
-            text=contagem_faixa_populacional['Contagem'], 
-            textposition='outside', 
+
+        # Calcula a frequência relativa
+        contagem_faixa_populacional['Frequencia_Relativa'] = contagem_faixa_populacional['Contagem'] / contagem_faixa_populacional['Contagem'].sum()
+
+        # Cria um gráfico de barras empilhadas com go.Figure()
+        st.write('Faixa Populacional nas Cidades com Liderança Feminina')
+        fig = go.Figure()
+
+        # Adiciona barras empilhadas ao gráfico
+        for i, row in contagem_faixa_populacional.iterrows():
+            faixa = row['Faixa Populacional']
+            freq_relativa = row['Frequencia_Relativa']
+            contagem = row['Contagem']
+            hovertext = f'Faixa: {faixa}<br>Contagem: {contagem}<br>Frequência Relativa: {freq_relativa:.2%}'
+            fig.add_trace(go.Bar(
+                x=[faixa],
+                y=[freq_relativa],  # Use a frequência relativa como altura da barra
+                text=[contagem],
+                textposition='outside',
+                name=faixa,
+                hoverinfo='text',
+                hovertext=hovertext,
+                marker_color=laranja[i % len(laranja)],
+                width=1,  # Define a largura da barra como 1 (1 unidade da frequência relativa)
+            ))
+
+        # Atualiza layout do gráfico
+        fig.update_layout(
+            xaxis_title='Faixa Populacional',
+            yaxis_title='Frequência Relativa',
+        #   title='Faixa Populacional nas Cidades com Liderança Feminina',
+            width=930,
+            height=450,
+            barmode='stack',  # Empilha as barras
         )
 
-        st.plotly_chart(figpop, use_container_width=True)
+        # Exibe o gráfico no Streamlit
+        st.plotly_chart(fig, use_container_width=False)
+
+    # Substituir "Nao informou" por NaN
+    geral_fem['Idade'].replace('Nao informou', pd.NA, inplace=True)
+
+    # Excluir as linhas onde a coluna "Idade" é NaN
+    geral_fem.dropna(subset=['Idade'], inplace=True)
+
+    # Transformar as variáveis de object para int
+    geral_fem['Idade'] = geral_fem['Idade'].astype(int)
+
+    # Definir as faixas etárias
+    faixas_etarias = [(0, 30), (30, 60), (60, 100)]
+    faixas_etarias_labels = ['19-29', '30-59', '60+']
+
+    # Inicialize o Streamlit com três colunas
+    col1, col2, col3 = st.columns(3)
+
+    for i, faixa in enumerate(faixas_etarias):
+        min_age, max_age = faixa
+        faixa_label = faixas_etarias_labels[i]
+
+        # Filtrar dados para a faixa etária
+        filtered_data = geral_fem[(geral_fem['Idade'] >= min_age) & (geral_fem['Idade'] <= max_age)]
+
+        # Calcular a frequência absoluta
+        freq_absoluta = len(filtered_data)
+
+        # Calcular a frequência relativa
+        freq_relativa = freq_absoluta / len(geral_fem)
+
+        # Criar um gráfico de distplot para a faixa etária atual
+        fig = ff.create_distplot([filtered_data['Idade']], [faixa_label], bin_size=5, show_curve=True)
+
+        # Configurar layout do gráfico
+        fig.update_layout(
+            xaxis_title='Idade',
+            yaxis_title='Densidade',
+            width=800,
+            height=500,
+        )
+
+        # Exibir o título acima do gráfico
+        with col1 if i == 0 else col2 if i == 1 else col3:
+            st.write(f'Distribuição de Idades - {faixa_label}')
+            st.plotly_chart(fig, use_container_width=True)
 
 # ----------------------------------------------------------------------
 
